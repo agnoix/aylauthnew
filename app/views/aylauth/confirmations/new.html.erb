@@ -1,0 +1,9 @@
+<h2 class"signup">Resend confirmation instructions</h2>
+
+<%= form_for(@user_data,:url => confirmation_path, :html => { :method => :post }) do |f| %>
+  <p><%= f.label :email %><br />
+  <%= f.email_field :email %></p>
+
+  <p><%= f.submit "Resend confirmation instructions" %></p>
+<% end %>
+

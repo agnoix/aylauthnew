@@ -1,0 +1,47 @@
+<h2 class="signup">Sign in</h2>
+
+<div id=reqform >
+  <form id="login" name="login" method="post" action="/sessions">
+    <p><label for="email">email</label><br />
+      <input type="text" name="email"/></p>
+
+    <p><label for="password">password</label><br />
+      <input type="password" name="password"/></p>
+
+    <p><input type="submit" value="Sign in"/></p>
+</div>
+
+<div class="social">
+  <h4> Or login using your favorite provider </h4>
+  <a id="google" href="#"><img style="width: 20px; margin-left: 10px; margin-top: 5px; " src="<%= Aylauth::Settings.user_service_base_url %>/images/google_oauth_logo.png"/></a>
+  <a id="facebook" href="#"><img style="width: 20px; margin-left: 10px; margin-top: 5px;" src="<%= Aylauth::Settings.user_service_base_url %>/images/facebook_oauth_logo.png"/></a>
+  <a id="wechat" href="#"><img style="width: 20px; margin-left: 10px; margin-top: 5px;" src="<%= Aylauth::Settings.user_service_base_url %>/images/wechat_oauth_logo.png"/></a>
+</div>
+
+<br/><br/>
+<%= render :partial => "links" %>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+      $(".social #google").on("click", function() {
+        $.get('/sessions/provider_auth.json', { provider: "google_provider" }, function(data) {
+          return_url = data.url + "&redirect_uri=<%= post_process_provider_auth_sessions_url %>";
+          window.location = return_url;
+        });
+      });
+
+      $(".social #facebook").on("click", function() {
+        $.get('/sessions/provider_auth.json', { provider: "facebook_provider" }, function(data) {
+          return_url = data.url + "&redirect_uri=<%= post_process_provider_auth_sessions_url %>";
+          window.location = return_url
+        });
+      });
+      
+      $(".social #wechat").on("click", function() {
+        $.get('/sessions/provider_auth.json', { provider: "wechat_provider" }, function(data) {
+          return_url = data.url + "&redirect_uri=<%= post_process_provider_auth_sessions_url %>";
+          window.location = return_url
+        });
+      });
+    });
+</script>

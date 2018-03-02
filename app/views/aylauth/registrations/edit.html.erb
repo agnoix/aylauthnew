@@ -1,0 +1,144 @@
+<% if Aylauth::Settings.application_id != "devwebserver_id" %>
+  <div id="reqform" >
+    <h3 class="signup">Change Role</h3>
+    <%= form_for @user_data, url: update_role_session_path(id: current_user.auth_token), :method => "put" do |f| %>
+
+      <br/>
+      <div class="row">
+        <div class="span2">
+          <p><%= label_tag 'Current Role' %>
+          <b><%= @user_data.role.try(:name) %></b></p>
+        </div>
+
+        <div class="span3">
+          <p><%= label_tag 'Available Roles' %>
+        <b><%= select_tag :role,
+          options_for_select( @roles.collect{|r| r["name"] }, @user_data.role.name) %>
+        </div>
+      </div>
+
+      <p><%= f.submit "Change", class: "btn" %></p>
+    <% end %>
+  </div>
+<% end %>
+
+<div id=reqform >
+  <h3 class="signup">Edit User</h3>
+  <%= form_for(@user_data, :url => registration_path(Base64.strict_encode64(current_user.auth_token)), :html => { :method => :put }) do |f| %>
+    <% if @response && @response["errors"] %>
+     <div id="error_edit">
+       <p><b>Below errors prohibited this profile from being updated:</b></br >
+       <ul>
+         <% @response["errors"].each do |error| %>
+           <li><%= error %></li>
+         <% end %>
+       </ul>
+     </div></br>
+   <% end %>
+
+    <input type="hidden" name="aylauth_user_data[id]" value="<%= @user_data.id %>"/>
+    <p> * required fields </p><br />
+
+    <p><%= f.label 'Email *' %>
+      <b><%= @user_data.email %></b></p><br />
+
+    <% if @user_data.admin_allowed %>
+      <!--
+      <p><%= f.label :admin %><br />
+        <%= f.check_box :admin %>
+        -->
+      <% end %>
+
+      <p><%= f.label 'Current password *' %> <i>(we need your current password to confirm your changes)</i><br />
+        <%= f.password_field :current_password %></p><br />
+
+      <p><%= f.label 'New password *' %> <i>(leave blank if you don't want to change it)</i><br />
+        <%= f.password_field :password %></p><br />
+
+      <p><%= f.label 'Retype new password *' %> <i>(leave blank if not changing password)</i> <br />
+        <%= f.password_field :password_confirmation %></p><br />
+
+      <p><%= f.label 'Company' %>
+        <%= f.text_field :company %> 
+        <% if current_user.oem.blank? %>
+          <span class='js-associate-oem'>Want to create / associate an OEM, <%= link_to "click here", new_oem_path %></span>
+        <% else %>
+          <span class='js-deassociate-oem'> Your account is associated with the OEM: 
+            <% if @user_data.oem_approved? %>
+              <%=link_to current_user.oem.name, oem_path(current_user.oem.id) %> <a id="deassociate" href="#">(deassociate?)</a>
+            <% else %>
+              <%= @user_data.oem.name %> <i>(Awaiting admin authorization)</i>
+            <% end %>
+            </span> 
+        <% end %>
+      </p><br />
+
+      <p><%= f.label :street %>
+        <%= f.text_field :street %> </p><br />
+
+      <p><%= f.label 'City' %>
+        <%= f.text_field :city %> </p><br />
+
+      <p><%= f.label :state %>
+        <%= f.text_field :state %> </p><br />
+
+      <p><%= f.label :zip %>
+        <%= f.text_field :zip %> </p><br />
+
+      <p><%= f.label 'Country *' %>
+        <%= f.text_field :country %> </p><br />
+
+      <p><%= f.label 'Phone' %>
+      <%= f.text_field :phone %> </p><br />
+
+      <div class="kit-container">
+        <div class="ayla-check">
+          Have an Ayla Dev kit&nbsp;<input type="checkbox" id="ayla_dev_kit_check"></input>
+        </div>
+        <div id="ayla_dev_kit_info" class="ayla-info display_none">
+          Ayla Dev Kit # <%= f.text_field :ayla_dev_kit_num %>
+        </div>
+      </div>
+      <br style="clear:both;"/><br />
+
+      <p><%= f.submit "Update", class: "btn" %></p>
+  <% end %>
+
+</div>
+
+<p><b>To cancel your account</b> - <%= link_to "click here", registration_path(@user_data.id), :confirm => "Are you sure?", :method => :delete %></p>
+
+<%= link_to "Back", :back %>
+
+<% content_for :javascript do %>
+  $(document).ready(function() {
+    var ayla_dev_div = $('div#ayla_dev_kit_info');
+    var ayla_dev_div_text = $('div#ayla_dev_kit_info input');
+    $('input#ayla_dev_kit_check').click(function() {
+      if ( $(this).is(':checked') ) {
+        ayla_dev_div.show();
+      } else {
+        ayla_dev_div_text.val("");
+        ayla_dev_div.hide();
+      }
+      });
+
+      // If ayla_dev_kit is set, click the check.
+      if (ayla_dev_div_text.val() != "") {
+        $('input#ayla_dev_kit_check').click();
+      }
+      });
+
+    $(".js-deassociate-oem #deassociate").click(function(e) {
+      e.preventDefault();
+      $.ajax({
+        type: 'POST',
+        url: aylanetworks.baseURI + "/oems/deassociate.json",
+        data: {},
+        dataType: 'json',
+        complete: function(jqXHR, textStatus) {
+          window.location.reload();
+        }
+    });
+  });
+<% end %>

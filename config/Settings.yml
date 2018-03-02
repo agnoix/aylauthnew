@@ -1,0 +1,4 @@
+  aylaservice_email: aylaservice@aylanetworks.com
+  aylaservice_pwd: "ayla123"
+  cache_key: "ayla_auth"
+  service_token_ttl: 12.hours

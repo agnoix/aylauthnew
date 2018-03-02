@@ -1,0 +1,31 @@
+{
+	"id": 1,
+	"oauth": false,
+	"oem": {
+		"created_at": null,
+		"id": 3,
+		"name": "Test",
+		"oem_id": "5amzoo00",
+		"updated_at": "2015-12-03T19:12:46Z"
+	},
+	"oem_approved": true,
+	"origin_oem_id": 3,
+	"origin_oem_str": "5amzoo00",
+	"role": "OEM::Admin",
+	"role_tags": [
+	],
+	"application": {
+		"uid": null,
+		"cloud_to_cloud": null
+	},
+	"super_app": null,
+	"linked_users": [
+	],
+	"user": {
+		"fullname": "Jon Doe",
+		"email": "jond@example.com",
+		"admin": true,
+		"oem_admin": true
+	},
+	"expiry_time": 20160621
+}

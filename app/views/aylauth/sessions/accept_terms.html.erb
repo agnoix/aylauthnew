@@ -1,0 +1,20 @@
+<h2 class="signup">Terms and Conditions</h2>
+
+<div id="reqForm">
+<%= form_for(@user_data, url: accept_terms_sessions_path, html: {method: :post}) do |f| %>
+	<br />
+	<p>
+		Please note a change to the Ayla Networks <a href="http://www.aylanetworks.com/legal">Terms of Service</a>.
+	</p>
+
+	<p>
+		By continuing to the site, you are agreeing to the updated <a href="http://www.aylanetworks.com/legal">Terms of Service</a>.
+	</p>
+	<br />
+
+	<p>
+		<%= link_to "Cancel", root_path %>
+		<%= f.submit "Continue" %>
+	</p>
+	<% end %>
+</div>

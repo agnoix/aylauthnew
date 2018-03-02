@@ -1,0 +1,15 @@
+<%- if controller_name != 'sessions' %>
+  <%= link_to "Sign in", new_session_path %><br />
+<% end -%>
+
+<%- if controller_name != 'registrations' %>
+  <%= link_to "Create an account", new_registration_path %><br />
+<% end -%>
+
+<%- if controller_name != 'confirmations' %>
+  <%= link_to "Resend confirmation", new_confirmation_path %><br />
+<% end -%>
+
+<%- if controller_name != 'passwords' %>
+<%= link_to "Forgot your password?", new_password_path %><br />
+<% end -%>

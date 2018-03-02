@@ -1,0 +1,99 @@
+<h2 class="signup">Sign up</h2>
+
+<div id=reqform >
+
+  <%= form_for(@user_data, :url => registrations_path) do |f| %>
+   <% if @errors %>
+    <div id="error_edit">
+      <p><b>Below errors prohibited this profile from being created:</b></br >
+        <ul>
+          <% @errors.each do |field, errors| %>
+            <% errors.each do |error| %>
+              <li><%= "#{field} #{error}" %></li>
+            <% end %>
+          <% end %>
+        </ul>
+      </p> </div></br>
+   <% end %>
+    <p> * required fields </p><br />
+
+    <p><%= f.label 'Email *' %>
+      <%= f.email_field :email %></p><br />
+
+    <p><%= f.label 'Password *' %>
+      <%= f.password_field :password %></p><br />
+
+    <p><%= f.label 'Password_confirmation *' %>
+      <%= f.password_field :password_confirmation %></p><br />
+
+    <p><%= f.label 'Firstname *' %>
+      <%= f.text_field :firstname %> </p><br />
+
+    <p><%= f.label 'Lastname *' %>
+      <%= f.text_field :lastname %> </p><br />
+
+    <p><%= f.label 'Company' %>
+      <%= f.text_field :company %> </p><br />
+
+    <p><%= f.label :street %>
+      <%= f.text_field :street %> </p><br />
+
+    <p><%= f.label 'City' %>
+      <%= f.text_field :city %> </p><br />
+
+    <p><%= f.label :state %>
+      <%= f.text_field :state %> </p><br />
+
+    <p><%= f.label :zip %>
+      <%= f.text_field :zip %> </p><br />
+
+    <p><%= f.label 'Country *' %>
+      <%= f.text_field :country %> </p><br />
+
+    <p><%= f.label 'Phone' %>
+      <%= f.text_field :phone %> </p>
+
+    <div class="kit-container">
+      <div class="ayla-check">
+        Have an Ayla Dev Kit <input type="checkbox" id="ayla_dev_kit_check"></input>
+      </div>
+      <div id="ayla_dev_kit_info" class="ayla-info display_none">
+        Ayla Dev Kit # <%= f.text_field :ayla_dev_kit_num %>
+      </div>
+    </div>
+    <br style="clear:both;"/><br />
+
+    <div>
+  	  <%= f.check_box :terms_accepted, id:"ayla_tos_check" %>
+  	  I agree to the Ayla <%= link_to "Terms of Service", "http://www.aylanetworks.com/legal" %>.
+    </div><br />
+
+    <%= f.submit "Sign up", id:"ayla_sign_up"%>
+<% end %>
+
+</div>
+<% content_for :javascript do %>
+  $(document).ready(function() {
+    var ayla_dev_div = $('div#ayla_dev_kit_info');
+    var ayla_dev_div_text = $('div#ayla_dev_kit_info input');
+    $('input#ayla_dev_kit_check').click(function() {
+      if ( $(this).is(':checked') ) {
+        ayla_dev_div.show();
+      } else {
+        ayla_dev_div_text.val("");
+        ayla_dev_div.hide();
+      }
+    });
+
+    document.getElementById("ayla_tos_check").checked = false;
+    document.getElementById("ayla_sign_up").disabled = true;
+    $('input#ayla_tos_check').click(function() {
+      if ( $(this).is(':checked') ) {
+      	document.getElementById("ayla_sign_up").disabled = false;
+      } else {
+      	document.getElementById("ayla_sign_up").disabled = true;
+      }
+    });
+  });
+<% end %>
+
